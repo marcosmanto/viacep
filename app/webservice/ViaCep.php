@@ -10,10 +10,22 @@ class ViaCep {
    */
   public static function consultarCep($cep)
   {
-    echo '<pre>';
-    print_r( $cep );
-    echo '</pre>';
-    die();
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+      CURLOPT_URL => 'https://viacep.com.br/ws/' . $cep . '/json/',
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_CUSTOMREQUEST => 'GET'
+    ]);
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+
+    $arr = json_decode($response, true);
+
+    return isset($arr['cep']) ? $arr : null;
+    //print_r($response) . '/n';
   }
 }
 
